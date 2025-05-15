@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.net.URL;
+import java.nio.file.Path;
 
 public class Card extends JFrame implements ActionListener {
     //Background
@@ -121,7 +122,7 @@ public class Card extends JFrame implements ActionListener {
         getContentPane().removeAll();
         URL mainScreenUrl = getClass().getResource("image/mainscreen.jpg");
         if (mainScreenUrl != null) {
-            int newWidth = 1510, newHeight = 900;
+            int newWidth = 1580, newHeight = 900;
             ImageIcon resizedIcon = new ImageIcon(new ImageIcon(mainScreenUrl).getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH));
 
             mainLabel = new JLabel(resizedIcon);
@@ -152,47 +153,63 @@ public class Card extends JFrame implements ActionListener {
         revalidate();
         repaint();
     }
-    private void cardStyle(){
-        //Poker 
-        URL pokeUrl = getClass().getResource("image/poker.png");
-        if(pokeUrl != null){
-            ImageIcon pokerIcon = new ImageIcon(pokeUrl);
+private void cardStyle() {
+    try {
+        // Poker card
+        URL pokerUrl = getClass().getResource("image/poker.png");
+        System.out.println("Attempting to load poker: " + pokerUrl);
+        
+        if (pokerUrl != null) {
+            ImageIcon pokerIcon = new ImageIcon(pokerUrl);
             poker.setIcon(pokerIcon);
             poker.setContentAreaFilled(false);
             poker.setBorderPainted(false);
             poker.setFocusPainted(false);
             poker.addActionListener(this);
             poker.setToolTipText("Let's play Poker");
-        }else{
-            System.err.println("Poker not found");
+        } else {
+            System.err.println("Poker image not found: image/poker.png");
+            poker.setText("Poker");  // Fallback text if image not found
         }
-        //Blackjack
-        URL blacjackUrl = getClass().getResource("image/blackjack.png");
-        if(blacjackUrl != null){
-            ImageIcon blackjackIcon = new ImageIcon(blacjackUrl);
+        
+        // Blackjack card
+        URL blackjackUrl = getClass().getResource("image/blackjack.png");
+        System.out.println("Attempting to load blackjack: " + blackjackUrl);
+        
+        if (blackjackUrl != null) {
+            ImageIcon blackjackIcon = new ImageIcon(blackjackUrl);
             blackjack.setIcon(blackjackIcon);
             blackjack.setContentAreaFilled(false);
             blackjack.setBorderPainted(false);
             blackjack.setFocusPainted(false);
             blackjack.addActionListener(this);
             blackjack.setToolTipText("Let's play Blackjack");
-        }else{
-            System.err.println("Blackjack not Found");
+        } else {
+            System.err.println("Blackjack image not found: image/blackjack.png");
+            blackjack.setText("Blackjack");  // Fallback text if image not found
         }
-        //Comming soon card
-        URL commingsooUrl = getClass().getResource("/image/commingsoon.png");
-        if(commingsooUrl != null){
-            ImageIcon commingsoonIcon = new ImageIcon(commingsooUrl);
-            commingsoon.setIcon(commingsoonIcon);
+        
+        // Coming soon card - FIXED: removed leading slash
+        URL comingsoonUrl = getClass().getResource("image/commingsoon.png");
+        System.out.println("Attempting to load coming soon: " + comingsoonUrl);
+        
+        if (comingsoonUrl != null) {
+            ImageIcon comingsoonIcon = new ImageIcon(comingsoonUrl);
+            commingsoon.setIcon(comingsoonIcon);
             commingsoon.setContentAreaFilled(false);
             commingsoon.setBorderPainted(false);
             commingsoon.setFocusPainted(false);
             commingsoon.addActionListener(this);
-            commingsoon.setToolTipText("Comming Soon Please Wait");
-        }else{
-            System.err.println("Not Found");
+            commingsoon.setToolTipText("Coming Soon Please Wait");
+        } else {
+            System.err.println("Coming soon image not found: image/commingsoon.png");
+            commingsoon.setText("Coming Soon");  // Fallback text if image not found
         }
+    } catch (Exception e) {
+        System.err.println("Error in cardStyle: " + e.getMessage());
+        e.printStackTrace();
     }
+}
     //----ACTION HANDLER---
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startButton) {
