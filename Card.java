@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.net.URL;
+import java.util.jar.JarEntry;
 
 public class Card extends JFrame implements ActionListener{
     private JFrame startFrame;
@@ -61,6 +62,8 @@ public class Card extends JFrame implements ActionListener{
 
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == startButton){
+            //Debuging
+            System.out.println("Start button clicked");
             guide_screen();
 
         }
@@ -69,19 +72,24 @@ public class Card extends JFrame implements ActionListener{
     private void guide_screen(){
         startFrame.dispose();
         JFrame guidFrame = new JFrame("Guid");
-        URL guid_screenURL = getClass().getResource("guid_screen.jpg");
+        URL guid_screenURL = getClass().getResource("guid_screen.png");
         if(guid_screenURL != null){
             ImageIcon guidIcon = new ImageIcon(guid_screenURL);
             //Style
-            int width = guidIcon.getIconWidth();
-            int height = guidIcon.getIconHeight();
-            guidFrame.setSize(height,width);
+            // int width = guidIcon.getIconWidth();
+            // int height = guidIcon.getIconHeight();
+            // guidFrame.setSize(width, height);
+            JLabel guideLabel = new JLabel(guidIcon);
+            guidFrame.add(guideLabel, BorderLayout.CENTER);
+            guidFrame.pack();
             guidFrame.setLayout(new BorderLayout());
-
-            guidFrame.setContentPane(new JLabel(guidIcon));
+            guidFrame.setContentPane(guideLabel);
             guidFrame.setLocationRelativeTo(null);
-            guidFrame.setVisible(true);
+        }else{
+            System.out.println("Background not found");
         }
+            
+        guidFrame.setVisible(true);
     }
 
     public static void main(String[] args){
