@@ -111,7 +111,7 @@ public class Card extends JFrame implements ActionListener {
     }
     private void main_game_screen(){
         getContentPane().removeAll();
-        URL main_screen = getClass().getClassLoader().getResource("");
+        URL main_screen = getClass().getClassLoader().getResource("start_backg.jpg");
         System.out.println("Attempting to load: " + main_screen);
         if(main_screen != null){
             ImageIcon originalIcon = new ImageIcon(main_screen);
