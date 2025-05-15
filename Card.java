@@ -23,10 +23,12 @@ public class Card extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setVisible(true);
     }
+    
     private void startScreen() {
         getContentPane().removeAll(); 
         try {
-            URL bgImUrl = getClass().getResource("start_backg.jpg");
+            // Consistent resource loading method
+            URL bgImUrl = getClass().getResource("image/start_backg.jpg");
             if (bgImUrl != null) {
                 ImageIcon backgroundIcon = new ImageIcon(bgImUrl);
                 int width = 1505;
@@ -44,6 +46,7 @@ public class Card extends JFrame implements ActionListener {
                 buttonPanel.add(startButton);
                 backgroundLabel.add(buttonPanel, BorderLayout.SOUTH);
             } else {
+                System.err.println("Background image not found: start_backg.jpg");
                 throw new Exception("Background not found");
             }
         } catch (Exception e) {
@@ -52,8 +55,10 @@ public class Card extends JFrame implements ActionListener {
         revalidate();
         repaint();
     }
+    
     private void styleStart() {
-        URL startUrl = getClass().getResource("start_button.png");
+        // Consistent resource loading method
+        URL startUrl = getClass().getResource("/start_button.png");
         if (startUrl != null) {
             ImageIcon start = new ImageIcon(startUrl);
             startButton.setIcon(start);
@@ -61,12 +66,16 @@ public class Card extends JFrame implements ActionListener {
             startButton.setBorderPainted(false);
             startButton.setFocusPainted(false);
             startButton.addActionListener(this);
+        } else {
+            System.err.println("Start button image not found: start_button.png");
         }
     }
+    
     private void guideScreen() {
         getContentPane().removeAll(); 
 
-        URL guidScreenURL = getClass().getResource("guid_screen.png");
+        // Consistent resource loading method
+        URL guidScreenURL = getClass().getResource("image/guid_screen.png");
         if (guidScreenURL != null) {
             ImageIcon originalIcon = new ImageIcon(guidScreenURL);
             int newWidth = 1550;
@@ -90,13 +99,15 @@ public class Card extends JFrame implements ActionListener {
             setContentPane(layeredPane);
             pack();
         } else {
-            System.out.println("Guide image not found");
+            System.err.println("Guide image not found: guid_screen.png");
         }
         revalidate();
         repaint();
     }
+    
     private void arrowStyle() {
-        URL arrowUrl = getClass().getResource("arrow.png");
+        // Consistent resource loading method
+        URL arrowUrl = getClass().getResource("image/arrow.png");
         if (arrowUrl != null) {
             ImageIcon arrowIcon = new ImageIcon(arrowUrl);
             arrow.setIcon(arrowIcon);
@@ -106,30 +117,31 @@ public class Card extends JFrame implements ActionListener {
             arrow.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             arrow.addActionListener(this);
         } else {
-            System.out.println("Arrow image not found");
+            System.err.println("Arrow image not found: arrow.png");
         }
     }
+    
     private void main_game_screen(){
         getContentPane().removeAll();
-        URL main_screen = getClass().getClassLoader().getResource("start_backg.jpg");
-        System.out.println("Attempting to load: " + main_screen);
+        // Use the same resource loading method as other methods
+        URL main_screen = getClass().getResource("image/Hehe.jpg");
         if(main_screen != null){
             ImageIcon originalIcon = new ImageIcon(main_screen);
             int width = 1550;
             int height = 900;
-            Image scaledImage = originalIcon.getImage().getScaledInstance(width,height, Image.SCALE_SMOOTH);
+            Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
             ImageIcon resizedIcon = new ImageIcon(scaledImage);
             mainLabel = new JLabel(resizedIcon);
             mainLabel.setLayout(new BorderLayout());
             setContentPane(mainLabel);
-            // setSize(width,height);
-            //Card add
+            // Additional UI elements can be added here
         } else {
-           System.out.println("Background not found");
+           System.err.println("Main screen background not found: start_backg.jpg");
         }
         revalidate();
         repaint();
     }
+    
     //----ACTION HANDLER---
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startButton) {
@@ -140,6 +152,7 @@ public class Card extends JFrame implements ActionListener {
             main_game_screen(); 
         }
     }
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Card());
     }
