@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 import java.net.URL;
+import javax.swing.*;
 
 public class Card extends JFrame implements ActionListener {
     //Background
