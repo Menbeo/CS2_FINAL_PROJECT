@@ -58,7 +58,7 @@ public class Card extends JFrame implements ActionListener {
     
     private void styleStart() {
         // Consistent resource loading method
-        URL startUrl = getClass().getResource("/start_button.png");
+        URL startUrl = getClass().getResource("image/start_button.png");
         if (startUrl != null) {
             ImageIcon start = new ImageIcon(startUrl);
             startButton.setIcon(start);
