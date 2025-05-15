@@ -9,9 +9,9 @@ public class Card extends JFrame implements ActionListener {
     private JLayeredPane layeredPane;
     private JLabel mainLabel;
     //Button
-    // private Jbutton poker;
-    // private JButton blackjack;
-    // private Jbutton commingsoon;
+    private JButton poker;
+    private JButton blackjack;
+    private JButton commingsoon;
     private JButton startButton;
     private JButton arrow;
 
@@ -24,16 +24,16 @@ public class Card extends JFrame implements ActionListener {
         setVisible(true);
     }
     
+    //---Start Screen--- 
     private void startScreen() {
         getContentPane().removeAll(); 
         try {
-            // Consistent resource loading method
             URL bgImUrl = getClass().getResource("image/start_backg.jpg");
             if (bgImUrl != null) {
                 ImageIcon backgroundIcon = new ImageIcon(bgImUrl);
-                int width = 1505;
-                int height = 845;
-                setSize(width, height);
+                int newWidth = 1550;
+                int newHeight = 900;
+                setSize(newWidth, newHeight);
                 backgroundLabel = new JLabel(backgroundIcon);
                 backgroundLabel.setLayout(new BorderLayout());
                 setContentPane(backgroundLabel);
@@ -57,7 +57,6 @@ public class Card extends JFrame implements ActionListener {
     }
     
     private void styleStart() {
-        // Consistent resource loading method
         URL startUrl = getClass().getResource("image/start_button.png");
         if (startUrl != null) {
             ImageIcon start = new ImageIcon(startUrl);
@@ -70,11 +69,9 @@ public class Card extends JFrame implements ActionListener {
             System.err.println("Start button image not found: start_button.png");
         }
     }
-    
+    //Guide Screen
     private void guideScreen() {
         getContentPane().removeAll(); 
-
-        // Consistent resource loading method
         URL guidScreenURL = getClass().getResource("image/guid_screen.png");
         if (guidScreenURL != null) {
             ImageIcon originalIcon = new ImageIcon(guidScreenURL);
@@ -106,7 +103,6 @@ public class Card extends JFrame implements ActionListener {
     }
     
     private void arrowStyle() {
-        // Consistent resource loading method
         URL arrowUrl = getClass().getResource("image/arrow.png");
         if (arrowUrl != null) {
             ImageIcon arrowIcon = new ImageIcon(arrowUrl);
@@ -123,25 +119,80 @@ public class Card extends JFrame implements ActionListener {
     
     private void main_game_screen(){
         getContentPane().removeAll();
-        // Use the same resource loading method as other methods
-        URL main_screen = getClass().getResource("image/Hehe.jpg");
-        if(main_screen != null){
-            ImageIcon originalIcon = new ImageIcon(main_screen);
-            int width = 1550;
-            int height = 900;
-            Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            ImageIcon resizedIcon = new ImageIcon(scaledImage);
+        URL mainScreenUrl = getClass().getResource("image/mainscreen.jpg");
+        if (mainScreenUrl != null) {
+            int newWidth = 1510, newHeight = 900;
+            ImageIcon resizedIcon = new ImageIcon(new ImageIcon(mainScreenUrl).getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH));
+
             mainLabel = new JLabel(resizedIcon);
-            mainLabel.setLayout(new BorderLayout());
-            setContentPane(mainLabel);
-            // Additional UI elements can be added here
-        } else {
-           System.err.println("Main screen background not found: start_backg.jpg");
+            mainLabel.setBounds(0, 0, newWidth, newHeight);
+            mainLabel.setOpaque(false);
+
+            poker = new JButton();
+            blackjack = new JButton();
+            commingsoon = new JButton();
+            cardStyle();
+
+            int sectionWidth = newWidth / 3, buttonWidth = 300, buttonHeight = 500, buttonY = 10;
+            poker.setBounds((sectionWidth - buttonWidth) / 2, buttonY, buttonWidth, buttonHeight);
+            blackjack.setBounds(sectionWidth + (sectionWidth - buttonWidth) / 2, buttonY, buttonWidth, buttonHeight);
+            commingsoon.setBounds(2 * sectionWidth + (sectionWidth - buttonWidth) / 2, buttonY, buttonWidth, buttonHeight);
+
+            layeredPane = new JLayeredPane();
+            layeredPane.setPreferredSize(new Dimension(newWidth, newHeight));
+            layeredPane.add(mainLabel, 0);
+            layeredPane.add(poker, 1);
+            layeredPane.add(blackjack, 2);
+            layeredPane.add(commingsoon, 3);
+            layeredPane.setOpaque(false);
+            setContentPane(layeredPane);
+        }else{
+            System.err.println("Main screen background not found");
         }
         revalidate();
         repaint();
     }
-    
+    private void cardStyle(){
+        //Poker 
+        URL pokeUrl = getClass().getResource("image/poker.png");
+        if(pokeUrl != null){
+            ImageIcon pokerIcon = new ImageIcon(pokeUrl);
+            poker.setIcon(pokerIcon);
+            poker.setContentAreaFilled(false);
+            poker.setBorderPainted(false);
+            poker.setFocusPainted(false);
+            poker.addActionListener(this);
+            poker.setToolTipText("Let's play Poker");
+        }else{
+            System.err.println("Poker not found");
+        }
+        //Blackjack
+        URL blacjackUrl = getClass().getResource("image/blackjack.png");
+        if(blacjackUrl != null){
+            ImageIcon blackjackIcon = new ImageIcon(blacjackUrl);
+            blackjack.setIcon(blackjackIcon);
+            blackjack.setContentAreaFilled(false);
+            blackjack.setBorderPainted(false);
+            blackjack.setFocusPainted(false);
+            blackjack.addActionListener(this);
+            blackjack.setToolTipText("Let's play Blackjack");
+        }else{
+            System.err.println("Blackjack not Found");
+        }
+        //Comming soon card
+        URL commingsooUrl = getClass().getResource("/image/commingsoon.png");
+        if(commingsooUrl != null){
+            ImageIcon commingsoonIcon = new ImageIcon(commingsooUrl);
+            commingsoon.setIcon(commingsoonIcon);
+            commingsoon.setContentAreaFilled(false);
+            commingsoon.setBorderPainted(false);
+            commingsoon.setFocusPainted(false);
+            commingsoon.addActionListener(this);
+            commingsoon.setToolTipText("Comming Soon Please Wait");
+        }else{
+            System.err.println("Not Found");
+        }
+    }
     //----ACTION HANDLER---
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startButton) {
@@ -150,6 +201,7 @@ public class Card extends JFrame implements ActionListener {
         } else if (e.getSource() == arrow) {
             System.out.println("Arrow button clicked");
             main_game_screen(); 
+
         }
     }
     
