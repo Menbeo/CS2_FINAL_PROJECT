@@ -35,22 +35,14 @@ public class CardGame extends JFrame {
     private JButton evaluateButton;
     private JButton pokerNewGameButton;
     private JLabel pokerResultLabel;
-
-    // Main Color
-    private final Color PRIMARY_COLOR = new Color(53, 101, 77);  
-    private final Color SECONDARY_COLOR = new Color(222, 238, 214);  
-    private final Color ACCENT_COLOR = new Color(231, 76, 60); 
-    private final Color BACKGROUND_COLOR = new Color(240, 245, 240);  
-    private final Color TEXT_COLOR = new Color(33, 33, 33);  
-
-    // Common Font
-    private final Font TITLE_FONT = new Font("Segoe UI", Font.BOLD, 32);
-    private final Font SUBTITLE_FONT = new Font("Segoe UI", Font.BOLD, 24);
-    private final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 16);
-    private final Font REGULAR_FONT = new Font("Segoe UI", Font.PLAIN, 16);
+    //Card background 
+    private JFrame startFrame;
+    private JLabel backgroundLabel;
+    private JButton startButton;
+    private JButton arrow;
 
     public CardGame() {
-        setTitle("Card Saga");
+        startScreen();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 700);
         setLocationRelativeTo(null);
