@@ -364,6 +364,7 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             dealerScoreLabel = new JLabel("Dealer Score: 0", SwingConstants.CENTER);
             dealerScoreLabel.setForeground(Color.WHITE);
             dealerScoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            // gbc.gridy = 2;
             gamePanel.add(dealerScoreLabel, gbc);
             gbc.gridy = 2;
             // Player cards panel
@@ -520,46 +521,50 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             gbc.fill = GridBagConstraints.VERTICAL;
             gbc.gridwidth = 5;
             // Computer cards panel without overlap
+            gbc.gridy = 0;
             computerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
             computerPokerCardsPanel.setOpaque(false);
             computerPokerCardsPanel.setPreferredSize(new Dimension(500, 500));
             gamePanel.add(computerPokerCardsPanel, gbc);
-            gbc.gridy = 1;
+            // gbc.gridy = 1;
             
+            gbc.gridy = 1;
             pokerResultLabel = new JLabel("Draw cards and evaluate", SwingConstants.CENTER);
             pokerResultLabel.setForeground(Color.WHITE);
             pokerResultLabel.setFont(new Font("Arial", Font.BOLD, 20));
             gamePanel.add(pokerResultLabel, gbc);
-            gbc.gridy = 2;
+           
 
-          
+            gbc.gridy = 2;
             // Player cards panel without overlap
             playerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
             playerPokerCardsPanel.setOpaque(false);
             playerPokerCardsPanel.setPreferredSize(new Dimension(500, 500));
             gamePanel.add(playerPokerCardsPanel, gbc);
-            gbc.gridy = 3;
-            
+            // gbc.gridy = 3;
+    
 
-            gbc.gridwidth = 2;
-            drawButton = createStyledButton("Draw");
-            gamePanel.add(drawButton, gbc);
+            // gbc.gridwidth = 2;
             gbc.gridx = 0;
             gbc.gridy = 3;
+            drawButton = createStyledButton("Draw");
+            gamePanel.add(drawButton, gbc);
+           
+            gbc.gridx = 0;
+            gbc.gridy = 4;
             evaluateButton = createStyledButton("Evaluate");
             evaluateButton.setEnabled(false);
             gamePanel.add(evaluateButton, gbc);
-            gbc.gridx = 1;
-            gbc.gridy = 4;
+            gbc.gridx = 0;
+            gbc.gridy = 5;
             assessHandsButton = createStyledButton("Assess Hands");
             assessHandsButton.setEnabled(false);
             gamePanel.add(assessHandsButton, gbc);
-            gbc.gridx = 2;
-            gbc.gridy = 3;
+            gbc.gridx = 0;
+            gbc.gridy = 6;
             pokerNewGameBUtton = createStyledButton("New Game");
             gamePanel.add(pokerNewGameBUtton, gbc);
-            gbc.gridx = 0;
-            gbc.gridy = 4; 
+            gbc.gridx = 7;
             gbc.gridwidth = 1; 
             pokerBackButton = createStyledButton("Back to Menu");
             gamePanel.add(pokerBackButton, gbc);
