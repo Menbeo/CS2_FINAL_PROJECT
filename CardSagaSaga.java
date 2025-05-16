@@ -190,8 +190,8 @@ public class CardSagaSaga extends JFrame implements ActionListener {
         URL mainScreenUrl = getClass().getResource("image/Hehe.jpg");
         if (mainScreenUrl != null) {
             ImageIcon originalIcon = new ImageIcon(mainScreenUrl);
-            int width = 1550;
-            int height = 900;
+            int width = 1464;
+            int height = 850;
             Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
             ImageIcon resizedIcon = new ImageIcon(scaledImage);
             mainLabel = new JLabel(resizedIcon);
@@ -203,14 +203,14 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             layeredPane.setBounds(0, 0, width, height);
 
             // Load card images (scaled to 300x400 for better fit)
-            ImageIcon pokerCardIcon = loadCardImage("image/poker.png", 888, 500);
-            ImageIcon blackjackCardIcon = loadCardImage("image/blackjack.png",888, 500);
-            ImageIcon comingSoonCardIcon = loadCardImage("image/commingsoon.png", 888, 500);
+            ImageIcon pokerCardIcon = loadCardImage("image/poker.png", 324, 464);
+            ImageIcon blackjackCardIcon = loadCardImage("image/blackjack.png",324, 464);
+            ImageIcon comingSoonCardIcon = loadCardImage("image/commingsoon.png", 324, 464);
 
             // Card dimensions
-            int cardWidth = 888; // Scaled size
-            int cardHeight = 500;
-            int gap = 1; // Space between cards
+            int cardWidth = 324; // Scaled size
+            int cardHeight = 464;
+            int gap = 150; // Space between cards
             int startX = (width - (3 * cardWidth + 2* gap)) / 2; // Center horizontally
             int startY = (height - cardHeight) / 2; // Center vertically
 
@@ -322,8 +322,8 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.gridwidth = 2;
-            // Dealer cards panel with overlap
-            dealerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, -20, 10)); // Negative hgap for overlap
+            // Dealer cards panel
+            dealerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10)); // Negative hgap for overlap
             dealerCardsPanel.setOpaque(false);
             dealerCardsPanel.setPreferredSize(new Dimension(600, 160)); // Fit multiple cards
             gamePanel.add(dealerCardsPanel, gbc);
@@ -333,8 +333,8 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             dealerScoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
             gamePanel.add(dealerScoreLabel, gbc);
             gbc.gridy = 2;
-            // Player cards panel with overlap
-            playerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, -20, 10));
+            // Player cards panel
+            playerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
             playerCardsPanel.setOpaque(false);
             playerCardsPanel.setPreferredSize(new Dimension(600, 160));
             gamePanel.add(playerCardsPanel, gbc);
@@ -481,13 +481,13 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             gbc.gridy = 0;
             gbc.gridwidth = 2;
             // Computer cards panel with overlap
-            computerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, -20, 10));
+            computerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
             computerPokerCardsPanel.setOpaque(false);
             computerPokerCardsPanel.setPreferredSize(new Dimension(600, 160));
             gamePanel.add(computerPokerCardsPanel, gbc);
             gbc.gridy = 1;
             // Player cards panel with overlap
-            playerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, -20, 10));
+            playerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
             playerPokerCardsPanel.setOpaque(false);
             playerPokerCardsPanel.setPreferredSize(new Dimension(600, 160));
             gamePanel.add(playerPokerCardsPanel, gbc);
@@ -918,10 +918,9 @@ public class CardSagaSaga extends JFrame implements ActionListener {
         return String.valueOf(rank);
     }
 
-    // Helper: Create card label with scaling
     private JLabel createCardLabel(Card card, boolean visible) {
-        final int CARD_WIDTH = 100; // Standard card size
-        final int CARD_HEIGHT = 140;
+        final int CARD_WIDTH = 80; 
+        final int CARD_HEIGHT = 112;
         if (visible) {
             String cardName = card.toString().replace("♠", "S").replace("♥", "H").replace("♦", "D").replace("♣", "C");
             URL cardUrl = getClass().getResource("image/" + cardName + ".png");
