@@ -924,7 +924,7 @@ public class CardSagaSaga extends JFrame implements ActionListener {
         final int CARD_HEIGHT = 140;
         if (visible) {
             String cardName = card.toString().replace("♠", "S").replace("♥", "H").replace("♦", "D").replace("♣", "C");
-            URL cardUrl = getClass().getResource("image/cards/" + cardName + ".png");
+            URL cardUrl = getClass().getResource("image/" + cardName + ".png");
             if (cardUrl != null) {
                 ImageIcon cardIcon = new ImageIcon(cardUrl);
                 Image scaledImage = cardIcon.getImage().getScaledInstance(CARD_WIDTH, CARD_HEIGHT, Image.SCALE_SMOOTH);
