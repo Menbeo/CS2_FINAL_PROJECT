@@ -203,15 +203,15 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             layeredPane.setBounds(0, 0, width, height);
 
             // Load card images (scaled to 300x400 for better fit)
-            ImageIcon pokerCardIcon = loadCardImage("image/poker.png", 300, 400);
-            ImageIcon blackjackCardIcon = loadCardImage("image/blackjack.png", 300, 400);
-            ImageIcon comingSoonCardIcon = loadCardImage("image/commingsoon.png", 300, 400);
+            ImageIcon pokerCardIcon = loadCardImage("image/poker.png", 888, 500);
+            ImageIcon blackjackCardIcon = loadCardImage("image/blackjack.png",888, 500);
+            ImageIcon comingSoonCardIcon = loadCardImage("image/commingsoon.png", 888, 500);
 
             // Card dimensions
-            int cardWidth = 500; // Scaled size
-            int cardHeight = 800;
-            int gap = 10; // Space between cards
-            int startX = (width - (3 * cardWidth + 2 * gap)) / 2; // Center horizontally
+            int cardWidth = 888; // Scaled size
+            int cardHeight = 500;
+            int gap = 1; // Space between cards
+            int startX = (width - (3 * cardWidth + 2* gap)) / 2; // Center horizontally
             int startY = (height - cardHeight) / 2; // Center vertically
 
             // Poker card label
@@ -229,12 +229,12 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             styleCardLabel(unoCardLabel, comingSoonCardIcon, startX + 2 * (cardWidth + gap), startY, cardWidth, cardHeight, false, null);
             layeredPane.add(unoCardLabel, Integer.valueOf(1));
 
-            // Add the title "CHOOSE YOUR GAME"
-            JLabel titleLabel = new JLabel("CHOOSE YOUR GAME", SwingConstants.CENTER);
-            titleLabel.setFont(new Font("Arial", Font.BOLD, 48));
-            titleLabel.setForeground(Color.WHITE);
-            titleLabel.setBounds(0, 50, width, 50);
-            layeredPane.add(titleLabel, Integer.valueOf(2));
+            // // Add the title "CHOOSE YOUR GAME"
+            // JLabel titleLabel = new JLabel("CHOOSE YOUR GAME", SwingConstants.CENTER);
+            // titleLabel.setFont(new Font("Arial", Font.BOLD, 48));
+            // titleLabel.setForeground(Color.WHITE);
+            // titleLabel.setBounds(0, 50, width, 50);
+            // layeredPane.add(titleLabel, Integer.valueOf(2));
 
             mainLabel.add(layeredPane);
             mainGamePanel.add(mainLabel, BorderLayout.CENTER);
