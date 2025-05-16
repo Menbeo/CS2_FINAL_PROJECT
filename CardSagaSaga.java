@@ -18,11 +18,6 @@ public class CardSagaSaga extends JFrame implements ActionListener {
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
-    // Game selection buttons
-    private JButton pokerButton;
-    private JButton blackjackButton;
-    private JButton unoButton;
-
     // Blackjack UI components
     private JPanel blackjackPanel;
     private JPanel playerCardsPanel;
@@ -189,7 +184,7 @@ public class CardSagaSaga extends JFrame implements ActionListener {
         }
     }
 
-    // Frontend: Main game selection screen (Modified to use card images)
+    // Frontend: Main game selection screen (Using card images as clickable labels)
     private void mainGameScreen() {
         JPanel mainGamePanel = new JPanel(new BorderLayout());
         URL mainScreenUrl = getClass().getResource("image/Hehe.jpg");
@@ -200,7 +195,7 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
             ImageIcon resizedIcon = new ImageIcon(scaledImage);
             mainLabel = new JLabel(resizedIcon);
-            mainLabel.setLayout(null); // Use absolute positioning for buttons
+            mainLabel.setLayout(null); // Use absolute positioning
 
             // Create a layered pane to hold the cards
             layeredPane = new JLayeredPane();
@@ -213,27 +208,26 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             ImageIcon comingSoonCardIcon = loadCardImage("image/commingsoon.png");
 
             // Card dimensions (adjust based on your image sizes)
-            int cardWidth = 300; // Adjust based on your card image width
-            int cardHeight = 450; // Adjust based on your card image height
+            int cardWidth = 1000; // Adjust based on your card image width
+            int cardHeight = 800; // Adjust based on your card image height
             int gap = 50; // Space between cards
             int startX = (width - (3 * cardWidth + 2 * gap)) / 2; // Center the cards horizontally
             int startY = (height - cardHeight) / 2; // Center the cards vertically
 
-            // Poker card button
-            pokerButton = new JButton();
-            styleCardButton(pokerButton, pokerCardIcon, "POKER", startX, startY, cardWidth, cardHeight);
-            layeredPane.add(pokerButton, Integer.valueOf(1));
+            // Poker card label
+            JLabel pokerCardLabel = new JLabel();
+            styleCardLabel(pokerCardLabel, pokerCardIcon, startX, startY, cardWidth, cardHeight, true, () -> createPokerPanel());
+            layeredPane.add(pokerCardLabel, Integer.valueOf(1));
 
-            // Blackjack card button
-            blackjackButton = new JButton();
-            styleCardButton(blackjackButton, blackjackCardIcon, "BLACKJACK", startX + cardWidth + gap, startY, cardWidth, cardHeight);
-            layeredPane.add(blackjackButton, Integer.valueOf(1));
+            // Blackjack card label
+            JLabel blackjackCardLabel = new JLabel();
+            styleCardLabel(blackjackCardLabel, blackjackCardIcon, startX + cardWidth + gap, startY, cardWidth, cardHeight, true, () -> createBlackjackPanel());
+            layeredPane.add(blackjackCardLabel, Integer.valueOf(1));
 
-            // Uno (Coming Soon) card button
-            unoButton = new JButton();
-            styleCardButton(unoButton, comingSoonCardIcon, "COMING", startX + 2 * (cardWidth + gap), startY, cardWidth, cardHeight);
-            unoButton.setEnabled(false);
-            layeredPane.add(unoButton, Integer.valueOf(1));
+            // Uno (Coming Soon) card label
+            JLabel unoCardLabel = new JLabel();
+            styleCardLabel(unoCardLabel, comingSoonCardIcon, startX + 2 * (cardWidth + gap), startY, cardWidth, cardHeight, false, null);
+            layeredPane.add(unoCardLabel, Integer.valueOf(1));
 
             // Add the title "CHOOSE YOUR GAME"
             JLabel titleLabel = new JLabel("CHOOSE YOUR GAME", SwingConstants.CENTER);
@@ -266,23 +260,25 @@ public class CardSagaSaga extends JFrame implements ActionListener {
         }
     }
 
-    // Helper method to style card buttons
-    private void styleCardButton(JButton button, ImageIcon cardIcon, String text, int x, int y, int width, int height) {
-        button.setIcon(cardIcon);
-        button.setBounds(x, y, width, height);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        button.addActionListener(this);
+    // Helper method to style card labels (yellow hover effect removed)
+    private void styleCardLabel(JLabel label, ImageIcon cardIcon, int x, int y, int width, int height, boolean enabled, Runnable action) {
+        label.setIcon(cardIcon);
+        label.setBounds(x, y, width, height);
+        label.setLayout(null);
 
-        // Add text label on top of the button
-        JLabel textLabel = new JLabel(text, SwingConstants.CENTER);
-        textLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        textLabel.setForeground(Color.WHITE);
-        textLabel.setBounds(0, height - 50, width, 40); // Position at the bottom of the card
-        button.setLayout(null);
-        button.add(textLabel);
+        if (enabled) {
+            label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            label.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    if (action != null) {
+                        action.run();
+                    }
+                }
+            });
+        } else {
+            label.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
     }
 
     // Helper: Create styled button (used for other screens)
@@ -942,10 +938,6 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             guideScreen();
         } else if (e.getSource() == arrow) {
             mainGameScreen();
-        } else if (e.getSource() == blackjackButton) {
-            createBlackjackPanel();
-        } else if (e.getSource() == pokerButton) {
-            createPokerPanel();
         } else if (e.getSource() == hitButton) {
             blackjackHit();
         } else if (e.getSource() == standButton) {
@@ -962,6 +954,6 @@ public class CardSagaSaga extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new CardSaga());
+        SwingUtilities.invokeLater(() -> new CardSagaSaga());
     }
 }
