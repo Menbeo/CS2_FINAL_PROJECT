@@ -27,6 +27,7 @@ public class CardSagaSaga extends JFrame implements ActionListener {
     private JButton hitButton;
     private JButton standButton;
     private JButton blackjackBackButton;
+    private JButton blackjackNewGameButton;
 
     // Poker UI components
     private JPanel pokerPanel;
@@ -37,6 +38,7 @@ public class CardSagaSaga extends JFrame implements ActionListener {
     private JButton evaluateButton;
     private JButton assessHandsButton;
     private JButton pokerBackButton;
+    private JButton pokerNewGameBUtton;
 
     // Backend variables
     private List<Card> blackjackDeck;
@@ -187,7 +189,7 @@ public class CardSagaSaga extends JFrame implements ActionListener {
     // Frontend: Main game selection screen (Using card images as clickable labels)
     private void mainGameScreen() {
         JPanel mainGamePanel = new JPanel(new BorderLayout());
-        URL mainScreenUrl = getClass().getResource("image/Hehe.jpg");
+        URL mainScreenUrl = getClass().getResource("image/hehe.png");
         if (mainScreenUrl != null) {
             ImageIcon originalIcon = new ImageIcon(mainScreenUrl);
             int width = 1464;
@@ -286,12 +288,40 @@ public class CardSagaSaga extends JFrame implements ActionListener {
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 24));
-        button.setForeground(Color.WHITE);
-        button.setBackground(new Color(0, 102, 204));
+        button.setForeground(new Color(61,57,82));
+        button.setBackground(new Color(255, 187, 234));
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        button.setBorder(BorderFactory.createLineBorder(new Color(90, 96, 167), 2));
         button.setPreferredSize(new Dimension(200, 60));
+        button.setMargin(new Insets(30,30,30,30));
         button.addActionListener(this);
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e){
+                if(button.isEnabled()){
+                    button.setBackground(new Color(216, 187, 255));
+
+                }
+            }
+            @Override
+            public void mouseExited(MouseEvent e){
+                if(button.isEnabled()){
+                    button.setBackground(new Color(255, 187, 234));
+                }
+            }
+        });
+        button.setDisabledIcon(null);
+        button.setEnabled(true); 
+        button.setBackground(new Color(255, 187, 234)); 
+        button.addPropertyChangeListener("enabled", evt -> {
+        if (!button.isEnabled()) {
+            button.setBackground(new Color(255, 255, 255)); 
+            button.setForeground(new Color(61, 59, 82, 128)); 
+        } else {
+            button.setBackground(new Color(255, 187, 234)); 
+            button.setForeground(new Color(61, 59, 82)); 
+        }
+    });
         return button;
     }
 
@@ -310,10 +340,13 @@ public class CardSagaSaga extends JFrame implements ActionListener {
     // Blackjack: Create UI panel
     private void createBlackjackPanel() {
         blackjackPanel = new JPanel(new BorderLayout());
-        URL bgUrl = getClass().getResource("image/Hehe.jpg");
+        URL bgUrl = getClass().getResource("image/blackjackbackg.png");
         if (bgUrl != null) {
+
             ImageIcon bgIcon = new ImageIcon(bgUrl);
-            JLabel bgLabel = new JLabel(bgIcon);
+            Image scaledImage = bgIcon.getImage().getScaledInstance(1550, 900, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(scaledImage);
+            JLabel bgLabel = new JLabel(resizedIcon);
             bgLabel.setLayout(new BorderLayout());
             JPanel gamePanel = new JPanel(new GridBagLayout());
             gamePanel.setOpaque(false);
@@ -323,7 +356,7 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             gbc.gridy = 0;
             gbc.gridwidth = 2;
             // Dealer cards panel
-            dealerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10)); // Negative hgap for overlap
+            dealerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10)); // hgap
             dealerCardsPanel.setOpaque(false);
             dealerCardsPanel.setPreferredSize(new Dimension(600, 160)); // Fit multiple cards
             gamePanel.add(dealerCardsPanel, gbc);
@@ -352,7 +385,10 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             gamePanel.add(standButton, gbc);
             gbc.gridx = 0;
             gbc.gridy = 5;
-            gbc.gridwidth = 2;
+            // gbc.gridwidth = 2;
+            blackjackNewGameButton = createStyledButton("New Game");
+            gamePanel.add(blackjackNewGameButton, gbc);
+            gbc.gridx = 1;
             blackjackBackButton = createStyledButton("Back to Menu");
             gamePanel.add(blackjackBackButton, gbc);
             bgLabel.add(gamePanel, BorderLayout.CENTER);
@@ -468,10 +504,12 @@ public class CardSagaSaga extends JFrame implements ActionListener {
     // Poker: Create UI panel
     private void createPokerPanel() {
         pokerPanel = new JPanel(new BorderLayout());
-        URL bgUrl = getClass().getResource("image/Hehe.jpg");
+        URL bgUrl = getClass().getResource("image/pokerback.png");
         if (bgUrl != null) {
             ImageIcon bgIcon = new ImageIcon(bgUrl);
-            JLabel bgLabel = new JLabel(bgIcon);
+            Image scaledImage = bgIcon.getImage().getScaledInstance(1550, 900, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(scaledImage);
+            JLabel bgLabel = new JLabel(resizedIcon);
             bgLabel.setLayout(new BorderLayout());
             JPanel gamePanel = new JPanel(new GridBagLayout());
             gamePanel.setOpaque(false);
@@ -479,37 +517,50 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             gbc.insets = new Insets(10, 10, 10, 10);
             gbc.gridx = 0;
             gbc.gridy = 0;
-            gbc.gridwidth = 2;
-            // Computer cards panel with overlap
-            computerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+            gbc.fill = GridBagConstraints.VERTICAL;
+            gbc.gridwidth = 5;
+            // Computer cards panel without overlap
+            computerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
             computerPokerCardsPanel.setOpaque(false);
-            computerPokerCardsPanel.setPreferredSize(new Dimension(600, 160));
+            computerPokerCardsPanel.setPreferredSize(new Dimension(500, 500));
             gamePanel.add(computerPokerCardsPanel, gbc);
             gbc.gridy = 1;
-            // Player cards panel with overlap
-            playerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-            playerPokerCardsPanel.setOpaque(false);
-            playerPokerCardsPanel.setPreferredSize(new Dimension(600, 160));
-            gamePanel.add(playerPokerCardsPanel, gbc);
-            gbc.gridy = 2;
+            
             pokerResultLabel = new JLabel("Draw cards and evaluate", SwingConstants.CENTER);
             pokerResultLabel.setForeground(Color.WHITE);
             pokerResultLabel.setFont(new Font("Arial", Font.BOLD, 20));
             gamePanel.add(pokerResultLabel, gbc);
+            gbc.gridy = 2;
+
+          
+            // Player cards panel without overlap
+            playerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+            playerPokerCardsPanel.setOpaque(false);
+            playerPokerCardsPanel.setPreferredSize(new Dimension(500, 500));
+            gamePanel.add(playerPokerCardsPanel, gbc);
             gbc.gridy = 3;
-            gbc.gridwidth = 1;
+            
+
+            gbc.gridwidth = 2;
             drawButton = createStyledButton("Draw");
             gamePanel.add(drawButton, gbc);
-            gbc.gridx = 1;
+            gbc.gridx = 0;
+            gbc.gridy = 3;
             evaluateButton = createStyledButton("Evaluate");
             evaluateButton.setEnabled(false);
             gamePanel.add(evaluateButton, gbc);
-            gbc.gridx = 0;
+            gbc.gridx = 1;
             gbc.gridy = 4;
             assessHandsButton = createStyledButton("Assess Hands");
             assessHandsButton.setEnabled(false);
             gamePanel.add(assessHandsButton, gbc);
-            gbc.gridx = 1;
+            gbc.gridx = 2;
+            gbc.gridy = 3;
+            pokerNewGameBUtton = createStyledButton("New Game");
+            gamePanel.add(pokerNewGameBUtton, gbc);
+            gbc.gridx = 0;
+            gbc.gridy = 4; 
+            gbc.gridwidth = 1; 
             pokerBackButton = createStyledButton("Back to Menu");
             gamePanel.add(pokerBackButton, gbc);
             bgLabel.add(gamePanel, BorderLayout.CENTER);
@@ -643,7 +694,6 @@ public class CardSagaSaga extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(this, scrollPane, "Poker Hand Assessment", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // Poker: Hand details
     private String getHandDetails(List<Card> hand, String handType) {
         StringBuilder details = new StringBuilder();
         List<Card> sortedHand = new ArrayList<>(hand);
@@ -727,7 +777,6 @@ public class CardSagaSaga extends JFrame implements ActionListener {
         }
         return details.toString();
     }
-
     // Poker: Compare high cards
     private int compareHighCards(List<Card> playerHand, List<Card> computerHand, String handType) {
         Collections.sort(playerHand, (c1, c2) -> c2.getRank() - c1.getRank());
@@ -938,7 +987,7 @@ public class CardSagaSaga extends JFrame implements ActionListener {
                 return fallback;
             }
         } else {
-            URL backUrl = getClass().getResource("image/cards/back.png");
+            URL backUrl = getClass().getResource("image/poker.png");
             if (backUrl != null) {
                 ImageIcon backIcon = new ImageIcon(backUrl);
                 Image scaledImage = backIcon.getImage().getScaledInstance(CARD_WIDTH, CARD_HEIGHT, Image.SCALE_SMOOTH);
@@ -966,7 +1015,11 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             blackjackHit();
         } else if (e.getSource() == standButton) {
             blackjackStand();
-        } else if (e.getSource() == drawButton) {
+        } else if (e.getSource() == blackjackNewGameButton) {
+            initBlackjackGame();
+        } else if (e.getSource() == pokerNewGameBUtton) {
+            initPokerGame();
+        }else if (e.getSource() == drawButton) {
             pokerDraw();
         } else if (e.getSource() == evaluateButton) {
             pokerEvaluate();
