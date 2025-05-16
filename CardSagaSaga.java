@@ -208,9 +208,9 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             ImageIcon comingSoonCardIcon = loadCardImage("image/commingsoon.png", 300, 400);
 
             // Card dimensions
-            int cardWidth = 300; // Scaled size
-            int cardHeight = 400;
-            int gap = 50; // Space between cards
+            int cardWidth = 500; // Scaled size
+            int cardHeight = 800;
+            int gap = 10; // Space between cards
             int startX = (width - (3 * cardWidth + 2 * gap)) / 2; // Center horizontally
             int startY = (height - cardHeight) / 2; // Center vertically
 
