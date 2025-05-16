@@ -1,16 +1,14 @@
-// CardSaga.java
-// Merged frontend (Card.java) and backend (CardGameBackend.java) for Card Saga
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections; // Explicitly import List
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.*;
 
-public class CardSaga extends JFrame implements ActionListener {
+public class CardSagaSaga extends JFrame implements ActionListener {
     // Frontend UI components
     private JLabel backgroundLabel;
     private JLayeredPane layeredPane;
@@ -85,7 +83,7 @@ public class CardSaga extends JFrame implements ActionListener {
         }
     }
 
-    public CardSaga() {
+    public CardSagaSaga() {
         setTitle("Card Saga");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         cardLayout = new CardLayout();
@@ -191,7 +189,7 @@ public class CardSaga extends JFrame implements ActionListener {
         }
     }
 
-    // Frontend: Main game selection screen
+    // Frontend: Main game selection screen (Modified to use card images)
     private void mainGameScreen() {
         JPanel mainGamePanel = new JPanel(new BorderLayout());
         URL mainScreenUrl = getClass().getResource("image/Hehe.jpg");
@@ -202,23 +200,49 @@ public class CardSaga extends JFrame implements ActionListener {
             Image scaledImage = originalIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
             ImageIcon resizedIcon = new ImageIcon(scaledImage);
             mainLabel = new JLabel(resizedIcon);
-            mainLabel.setLayout(new BorderLayout());
-            JPanel buttonPanel = new JPanel(new GridBagLayout());
-            buttonPanel.setOpaque(false);
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(10, 10, 10, 10);
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            blackjackButton = createStyledButton("Blackjack");
-            buttonPanel.add(blackjackButton, gbc);
-            gbc.gridy = 1;
-            pokerButton = createStyledButton("Poker");
-            buttonPanel.add(pokerButton, gbc);
-            gbc.gridy = 2;
-            unoButton = createStyledButton("Uno (Coming Soon)");
+            mainLabel.setLayout(null); // Use absolute positioning for buttons
+
+            // Create a layered pane to hold the cards
+            layeredPane = new JLayeredPane();
+            layeredPane.setPreferredSize(new Dimension(width, height));
+            layeredPane.setBounds(0, 0, width, height);
+
+            // Load card images
+            ImageIcon pokerCardIcon = loadCardImage("image/poker.png");
+            ImageIcon blackjackCardIcon = loadCardImage("image/blackjack.png");
+            ImageIcon comingSoonCardIcon = loadCardImage("image/commingsoon.png");
+
+            // Card dimensions (adjust based on your image sizes)
+            int cardWidth = 300; // Adjust based on your card image width
+            int cardHeight = 450; // Adjust based on your card image height
+            int gap = 50; // Space between cards
+            int startX = (width - (3 * cardWidth + 2 * gap)) / 2; // Center the cards horizontally
+            int startY = (height - cardHeight) / 2; // Center the cards vertically
+
+            // Poker card button
+            pokerButton = new JButton();
+            styleCardButton(pokerButton, pokerCardIcon, "POKER", startX, startY, cardWidth, cardHeight);
+            layeredPane.add(pokerButton, Integer.valueOf(1));
+
+            // Blackjack card button
+            blackjackButton = new JButton();
+            styleCardButton(blackjackButton, blackjackCardIcon, "BLACKJACK", startX + cardWidth + gap, startY, cardWidth, cardHeight);
+            layeredPane.add(blackjackButton, Integer.valueOf(1));
+
+            // Uno (Coming Soon) card button
+            unoButton = new JButton();
+            styleCardButton(unoButton, comingSoonCardIcon, "COMING", startX + 2 * (cardWidth + gap), startY, cardWidth, cardHeight);
             unoButton.setEnabled(false);
-            buttonPanel.add(unoButton, gbc);
-            mainLabel.add(buttonPanel, BorderLayout.CENTER);
+            layeredPane.add(unoButton, Integer.valueOf(1));
+
+            // Add the title "CHOOSE YOUR GAME"
+            JLabel titleLabel = new JLabel("CHOOSE YOUR GAME", SwingConstants.CENTER);
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 48));
+            titleLabel.setForeground(Color.WHITE);
+            titleLabel.setBounds(0, 50, width, 50);
+            layeredPane.add(titleLabel, Integer.valueOf(2));
+
+            mainLabel.add(layeredPane);
             mainGamePanel.add(mainLabel, BorderLayout.CENTER);
             setSize(width, height);
         } else {
@@ -230,7 +254,38 @@ public class CardSaga extends JFrame implements ActionListener {
         repaint();
     }
 
-    // Helper: Create styled button
+    // Helper method to load card images
+    private ImageIcon loadCardImage(String path) {
+        URL cardUrl = getClass().getResource(path);
+        if (cardUrl != null) {
+            ImageIcon cardIcon = new ImageIcon(cardUrl);
+            return cardIcon;
+        } else {
+            System.err.println("Card image not found: " + path);
+            return new ImageIcon(); // Return an empty icon if image not found
+        }
+    }
+
+    // Helper method to style card buttons
+    private void styleCardButton(JButton button, ImageIcon cardIcon, String text, int x, int y, int width, int height) {
+        button.setIcon(cardIcon);
+        button.setBounds(x, y, width, height);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        button.addActionListener(this);
+
+        // Add text label on top of the button
+        JLabel textLabel = new JLabel(text, SwingConstants.CENTER);
+        textLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        textLabel.setForeground(Color.WHITE);
+        textLabel.setBounds(0, height - 50, width, 40); // Position at the bottom of the card
+        button.setLayout(null);
+        button.add(textLabel);
+    }
+
+    // Helper: Create styled button (used for other screens)
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 24));
@@ -258,7 +313,7 @@ public class CardSaga extends JFrame implements ActionListener {
     // Blackjack: Create UI panel
     private void createBlackjackPanel() {
         blackjackPanel = new JPanel(new BorderLayout());
-        URL bgUrl = getClass().getResource("image/Hehe.jpg"); // Reuse main background
+        URL bgUrl = getClass().getResource("image/Hehe.jpg");
         if (bgUrl != null) {
             ImageIcon bgIcon = new ImageIcon(bgUrl);
             JLabel bgLabel = new JLabel(bgIcon);
