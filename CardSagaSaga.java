@@ -202,17 +202,17 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             layeredPane.setPreferredSize(new Dimension(width, height));
             layeredPane.setBounds(0, 0, width, height);
 
-            // Load card images
-            ImageIcon pokerCardIcon = loadCardImage("image/poker.png");
-            ImageIcon blackjackCardIcon = loadCardImage("image/blackjack.png");
-            ImageIcon comingSoonCardIcon = loadCardImage("image/commingsoon.png");
+            // Load card images (scaled to 300x400 for better fit)
+            ImageIcon pokerCardIcon = loadCardImage("image/poker.png", 300, 400);
+            ImageIcon blackjackCardIcon = loadCardImage("image/blackjack.png", 300, 400);
+            ImageIcon comingSoonCardIcon = loadCardImage("image/commingsoon.png", 300, 400);
 
-            // Card dimensions (adjust based on your image sizes)
-            int cardWidth = 1000; // Adjust based on your card image width
-            int cardHeight = 800; // Adjust based on your card image height
+            // Card dimensions
+            int cardWidth = 300; // Scaled size
+            int cardHeight = 400;
             int gap = 50; // Space between cards
-            int startX = (width - (3 * cardWidth + 2 * gap)) / 2; // Center the cards horizontally
-            int startY = (height - cardHeight) / 2; // Center the cards vertically
+            int startX = (width - (3 * cardWidth + 2 * gap)) / 2; // Center horizontally
+            int startY = (height - cardHeight) / 2; // Center vertically
 
             // Poker card label
             JLabel pokerCardLabel = new JLabel();
@@ -248,19 +248,20 @@ public class CardSagaSaga extends JFrame implements ActionListener {
         repaint();
     }
 
-    // Helper method to load card images
-    private ImageIcon loadCardImage(String path) {
+    // Helper method to load card images with scaling
+    private ImageIcon loadCardImage(String path, int width, int height) {
         URL cardUrl = getClass().getResource(path);
         if (cardUrl != null) {
             ImageIcon cardIcon = new ImageIcon(cardUrl);
-            return cardIcon;
+            Image scaledImage = cardIcon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaledImage);
         } else {
             System.err.println("Card image not found: " + path);
             return new ImageIcon(); // Return an empty icon if image not found
         }
     }
 
-    // Helper method to style card labels (yellow hover effect removed)
+    // Helper method to style card labels
     private void styleCardLabel(JLabel label, ImageIcon cardIcon, int x, int y, int width, int height, boolean enabled, Runnable action) {
         label.setIcon(cardIcon);
         label.setBounds(x, y, width, height);
@@ -321,8 +322,10 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.gridwidth = 2;
-            dealerCardsPanel = new JPanel(new FlowLayout());
+            // Dealer cards panel with overlap
+            dealerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, -20, 10)); // Negative hgap for overlap
             dealerCardsPanel.setOpaque(false);
+            dealerCardsPanel.setPreferredSize(new Dimension(600, 160)); // Fit multiple cards
             gamePanel.add(dealerCardsPanel, gbc);
             gbc.gridy = 1;
             dealerScoreLabel = new JLabel("Dealer Score: 0", SwingConstants.CENTER);
@@ -330,8 +333,10 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             dealerScoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
             gamePanel.add(dealerScoreLabel, gbc);
             gbc.gridy = 2;
-            playerCardsPanel = new JPanel(new FlowLayout());
+            // Player cards panel with overlap
+            playerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, -20, 10));
             playerCardsPanel.setOpaque(false);
+            playerCardsPanel.setPreferredSize(new Dimension(600, 160));
             gamePanel.add(playerCardsPanel, gbc);
             gbc.gridy = 3;
             playerScoreLabel = new JLabel("Player Score: 0", SwingConstants.CENTER);
@@ -475,12 +480,16 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.gridwidth = 2;
-            computerPokerCardsPanel = new JPanel(new FlowLayout());
+            // Computer cards panel with overlap
+            computerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, -20, 10));
             computerPokerCardsPanel.setOpaque(false);
+            computerPokerCardsPanel.setPreferredSize(new Dimension(600, 160));
             gamePanel.add(computerPokerCardsPanel, gbc);
             gbc.gridy = 1;
-            playerPokerCardsPanel = new JPanel(new FlowLayout());
+            // Player cards panel with overlap
+            playerPokerCardsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, -20, 10));
             playerPokerCardsPanel.setOpaque(false);
+            playerPokerCardsPanel.setPreferredSize(new Dimension(600, 160));
             gamePanel.add(playerPokerCardsPanel, gbc);
             gbc.gridy = 2;
             pokerResultLabel = new JLabel("Draw cards and evaluate", SwingConstants.CENTER);
@@ -553,7 +562,7 @@ public class CardSagaSaga extends JFrame implements ActionListener {
             playerPokerCardsPanel.add(createCardLabel(card, true));
         }
         for (Card card : computerPokerHand) {
-            computerPokerCardsPanel.add(createCardLabel(card, revealComputer));
+            playerPokerCardsPanel.add(createCardLabel(card, revealComputer));
         }
         playerPokerCardsPanel.revalidate();
         playerPokerCardsPanel.repaint();
@@ -909,24 +918,40 @@ public class CardSagaSaga extends JFrame implements ActionListener {
         return String.valueOf(rank);
     }
 
-    // Helper: Create card label
+    // Helper: Create card label with scaling
     private JLabel createCardLabel(Card card, boolean visible) {
+        final int CARD_WIDTH = 100; // Standard card size
+        final int CARD_HEIGHT = 140;
         if (visible) {
             String cardName = card.toString().replace("♠", "S").replace("♥", "H").replace("♦", "D").replace("♣", "C");
             URL cardUrl = getClass().getResource("image/cards/" + cardName + ".png");
             if (cardUrl != null) {
-                return new JLabel(new ImageIcon(cardUrl));
+                ImageIcon cardIcon = new ImageIcon(cardUrl);
+                Image scaledImage = cardIcon.getImage().getScaledInstance(CARD_WIDTH, CARD_HEIGHT, Image.SCALE_SMOOTH);
+                return new JLabel(new ImageIcon(scaledImage));
             } else {
                 System.err.println("Card image not found: " + cardName + ".png");
-                return new JLabel(card.toString());
+                JLabel fallback = new JLabel(card.toString(), SwingConstants.CENTER);
+                fallback.setFont(new Font("Arial", Font.BOLD, 12));
+                fallback.setForeground(Color.RED);
+                fallback.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                fallback.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
+                return fallback;
             }
         } else {
             URL backUrl = getClass().getResource("image/cards/back.png");
             if (backUrl != null) {
-                return new JLabel(new ImageIcon(backUrl));
+                ImageIcon backIcon = new ImageIcon(backUrl);
+                Image scaledImage = backIcon.getImage().getScaledInstance(CARD_WIDTH, CARD_HEIGHT, Image.SCALE_SMOOTH);
+                return new JLabel(new ImageIcon(scaledImage));
             } else {
                 System.err.println("Card back image not found: back.png");
-                return new JLabel("Hidden");
+                JLabel fallback = new JLabel("Hidden", SwingConstants.CENTER);
+                fallback.setFont(new Font("Arial", Font.BOLD, 12));
+                fallback.setForeground(Color.BLUE);
+                fallback.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                fallback.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
+                return fallback;
             }
         }
     }
